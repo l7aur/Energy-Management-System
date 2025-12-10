@@ -1,0 +1,357 @@
+services:
+  # sensor data queue
+  sensor-data-queue:
+    image: rabbitmq:4-management
+    container_name: sensor-data-queue
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5672:5672"
+      - "15672:15672" # to be removed
+    networks:
+      - data-network
+
+  # synchronization topic
+  synchronization-topic:
+    image: rabbitmq:4-management
+    container_name: synchronization-topic
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports: # to be removed
+      - "15673:15672" # to be removed
+    networks:
+      - synchronization-topic-network
+
+  # ingestion topic
+  ingestion-topic:
+    image: rabbitmq:4-management
+    container_name: ingestion-topic
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports: # to be removed
+      - "15674:15672" # to be removed
+    networks:
+      - ingestion-network
+
+  # authentication microservice database container
+  authentication-microservice-database:
+    image: postgres
+    container_name: authentication-microservice-database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U DS_l7aur_authentication_microservice -d authentication_microservice_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: always
+    environment:
+      POSTGRES_USER: DS_l7aur_authentication_microservice
+      POSTGRES_PASSWORD: 2003
+      POSTGRES_DB: authentication_microservice_database
+    volumes:
+      - authentication-microservice-database:/var/lib/postgresql
+    networks:
+      - authentication-network
+
+  # authentication microservice backend container
+  authentication-microservice:
+    build:
+      context: ./authentication-microservice
+      dockerfile: ./Dockerfile
+    container_name: authentication-microservice
+    environment:
+      - DB_IP=authentication-microservice-database
+      - DB_PORT=5432
+      - DB_DBNAME=authentication_microservice_database
+      - DB_USER=DS_l7aur_authentication_microservice
+      - DB_PASSWORD=2003
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+      authentication-microservice-database:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - authentication-network
+      - synchronization-topic-network
+
+  # device microservice database container
+  device-microservice-database:
+    image: postgres
+    container_name: device-microservice-database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U DS_l7aur_device_microservice -d device_microservice_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: always
+    environment:
+      POSTGRES_USER: DS_l7aur_device_microservice
+      POSTGRES_PASSWORD: 2003
+      POSTGRES_DB: device_microservice_database
+    volumes:
+      - device-microservice-database:/var/lib/postgresql
+    networks:
+      - device-network
+
+  # device microservice backend container
+  device-microservice:
+    build:
+      context: ./device-microservice
+      dockerfile: ./Dockerfile
+    container_name: device-microservice
+    environment:
+      - DB_IP=device-microservice-database
+      - DB_PORT=5432
+      - DB_DBNAME=device_microservice_database
+      - DB_USER=DS_l7aur_device_microservice
+      - DB_PASSWORD=2003
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+      device-microservice-database:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - device-network
+      - synchronization-topic-network
+
+  # user microservice database container
+  user-microservice-database:
+    image: postgres
+    container_name: user-microservice-database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U DS_l7aur_user_microservice -d user_microservice_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: always
+    environment:
+      POSTGRES_USER: DS_l7aur_user_microservice
+      POSTGRES_PASSWORD: 2003
+      POSTGRES_DB: user_microservice_database
+    volumes:
+      - user-microservice-database:/var/lib/postgresql
+    networks:
+      - user-network
+
+  # user microservice backend container
+  user-microservice:
+    build:
+      context: ./user-microservice
+      dockerfile: ./Dockerfile
+    container_name: user-microservice
+    environment:
+      - DB_IP=user-microservice-database
+      - DB_PORT=5432
+      - DB_DBNAME=user_microservice_database
+      - DB_USER=DS_l7aur_user_microservice
+      - DB_PASSWORD=2003
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+      user-microservice-database:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - user-network
+      - synchronization-topic-network
+
+  # monitoring microservice database container
+  monitoring-microservice-database:
+    image: postgres
+    container_name: monitoring-microservice-database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U DS_l7aur_monitoring_microservice -d monitoring_microservice_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: always
+    environment:
+      POSTGRES_USER: DS_l7aur_monitoring_microservice
+      POSTGRES_PASSWORD: 2003
+      POSTGRES_DB: monitoring_microservice_database
+    volumes:
+      - monitoring-microservice-database:/var/lib/postgresql
+    networks:
+      - monitoring-network
+
+  # monitoring microservice backend container replica 0
+  monitoring-microservice-0:
+    build:
+      context: ./monitoring-microservice
+      dockerfile: ./Dockerfile
+    container_name: monitoring-microservice-0
+    environment:
+      - DB_IP=monitoring-microservice-database
+      - DB_PORT=5432
+      - DB_DBNAME=monitoring_microservice_database
+      - DB_USER=DS_l7aur_monitoring_microservice
+      - DB_PASSWORD=2003
+      - INGESTION_QUEUE_NAME=ingestion.queue.0
+      - INGESTION_ROUTING_KEY=ingestion.queue.0
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+      sensor-data-queue:
+        condition: service_healthy
+      monitoring-microservice-database:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - ingestion-network
+      - monitoring-network
+      - synchronization-topic-network
+
+
+  # monitoring microservice backend container replica 1
+  monitoring-microservice-1:
+    build:
+      context: ./monitoring-microservice
+      dockerfile: ./Dockerfile
+    container_name: monitoring-microservice-1
+    environment:
+      - DB_IP=monitoring-microservice-database
+      - DB_PORT=5432
+      - DB_DBNAME=monitoring_microservice_database
+      - DB_USER=DS_l7aur_monitoring_microservice
+      - DB_PASSWORD=2003
+      - INGESTION_QUEUE_NAME=ingestion.queue.1
+      - INGESTION_ROUTING_KEY=ingestion.queue.1
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+      sensor-data-queue:
+        condition: service_healthy
+      monitoring-microservice-database:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - ingestion-network
+      - monitoring-network
+      - synchronization-topic-network
+
+  # monitoring microservice backend container replica 2
+  monitoring-microservice-2:
+    build:
+      context: ./monitoring-microservice
+      dockerfile: ./Dockerfile
+    container_name: monitoring-microservice-2
+    environment:
+      - DB_IP=monitoring-microservice-database
+      - DB_PORT=5432
+      - DB_DBNAME=monitoring_microservice_database
+      - DB_USER=DS_l7aur_monitoring_microservice
+      - DB_PASSWORD=2003
+      - INGESTION_QUEUE_NAME=ingestion.queue.2
+      - INGESTION_ROUTING_KEY=ingestion.queue.2
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+      sensor-data-queue:
+        condition: service_healthy
+      monitoring-microservice-database:
+        condition: service_healthy
+    networks:
+      - traefik-network
+      - ingestion-network
+      - monitoring-network
+      - synchronization-topic-network
+
+  # notification microservice backend container
+  notification-microservice:
+    build:
+      context: ./notification-microservice
+      dockerfile: ./Dockerfile
+    container_name: notification-microservice
+    depends_on:
+      synchronization-topic:
+        condition: service_healthy
+    networks:
+      - synchronization-topic-network
+      - traefik-network
+
+  # customer support microservice backend container
+  customer-support-microservice:
+    build:
+      context: ./customer-support-microservice
+      dockerfile: ./Dockerfile
+    container_name: customer-support-microservice
+    networks:
+      - traefik-network
+
+  # load balancer microservice backend container
+  load-balancer-microservice:
+    build:
+      context: ./load-balancer-microservice
+      dockerfile: ./Dockerfile
+    container_name: load-balancer-microservice
+    depends_on:
+      ingestion-topic:
+        condition: service_healthy
+      sensor-data-queue:
+        condition: service_healthy
+    networks:
+      - data-network
+      - ingestion-network
+
+  # traefik container
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80" # The HTTP port
+      # - "443:443" # The HTTPS port
+      - "8081:8080" # Dashboard port
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" # Traefik can listen to the Docker events
+      - "./traefik.yml:/etc/traefik/traefik.yml:ro" # Static configuration file
+      - "./dynamic:/etc/traefik/dynamic:ro" # Dynamic configuration files
+      - "./logs:/var/log/traefik" # Log files
+    networks:
+      - traefik-network
+
+volumes:
+  authentication-microservice-database:
+  device-microservice-database:
+  user-microservice-database:
+  monitoring-microservice-database:
+
+networks:
+  traefik-network:
+    name: traefik-network
+    driver: bridge
+  authentication-network:
+    name: authentication-network
+    driver: bridge
+  device-network:
+    name: device-network
+    driver: bridge
+  user-network:
+    name: user-network
+    driver: bridge
+  monitoring-network:
+    name: monitoring-network
+    driver: bridge
+  data-network:
+    name: data-network
+    driver: bridge
+  synchronization-topic-network:
+    name: synchronization-topic-network
+    driver: bridge
+  ingestion-network:
+    name: ingestion-network
+    driver: bridge

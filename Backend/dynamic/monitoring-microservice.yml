@@ -1,0 +1,35 @@
+http:
+  routers:
+    monitoring-microservice-secure:
+      rule: "Host(`localhost`) && PathPrefix(`/monitoring/secure`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-monitoring-prefix
+        - cors-middleware
+        - my-jwt-middleware
+      service: monitoring-microservice
+
+    monitoring-microservice-public:
+      rule: "Host(`localhost`) && PathPrefix(`/monitoring/public`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-monitoring-prefix
+        - cors-middleware
+      service: monitoring-microservice
+
+  middlewares:
+    strip-monitoring-prefix:
+      stripPrefix:
+        prefixes:
+          - "/monitoring/public"
+          - "/monitoring/secure"
+
+  services:
+    monitoring-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://monitoring-microservice-0:7777"
+          - url: "http://monitoring-microservice-1:7777"
+          - url: "http://monitoring-microservice-2:7777"

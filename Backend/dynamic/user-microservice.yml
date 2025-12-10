@@ -1,0 +1,33 @@
+http:
+  routers:
+    user-microservice-secure:
+      rule: "Host(`localhost`) && PathPrefix(`/user/secure`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-user-prefix
+        - cors-middleware
+        - my-jwt-middleware
+      service: user-microservice
+
+    user-microservice-public:
+      rule: "Host(`localhost`) && PathPrefix(`/user/public`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-user-prefix
+        - cors-middleware
+      service: user-microservice
+
+  middlewares:
+    strip-user-prefix:
+      stripPrefix:
+        prefixes:
+          - "/user/secure"
+          - "/user/public"
+
+  services:
+    user-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://user-microservice:7777"

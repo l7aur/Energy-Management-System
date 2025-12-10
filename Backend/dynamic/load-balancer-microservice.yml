@@ -1,0 +1,34 @@
+http:
+  routers:
+    load-balancer-microservice-secure:
+      rule: "Host(`localhost`) && PathPrefix(`/loadbalancer/secure`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-load-balancer-prefix
+        - cors-middleware
+        - my-jwt-middleware
+      service: load-balancer-microservice
+
+    load-balancer-microservice-public:
+      rule: "Host(`localhost`) && PathPrefix(`/loadbalancer/public`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-load-balancer-prefix
+        - cors-middleware
+      service: load-balancer-microservice
+
+  middlewares:
+    strip-load-balancer-prefix:
+      stripPrefix:
+        prefixes:
+          - "/loadbalancer/public"
+          - "/loadbalancer/secure"
+
+  services:
+    load-balancer-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://load-balancer-microservice:7777"
+        passHostHeader: true

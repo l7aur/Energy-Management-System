@@ -1,0 +1,6 @@
+http:
+  middlewares:
+    my-jwt-middleware:
+      plugin:
+        jwt-middleware:
+          secret: LaurentiuAreUnCilindruInaltDeUnKilometruSiLatDeCinciSuteDeMetriCareEVolumulCilindrului

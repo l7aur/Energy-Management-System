@@ -1,0 +1,296 @@
+/* General page styles */
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #121212; /* dark background */
+  color: #e0e0e0; /* light text for readability */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card container (like a login form wrapper) */
+.page .card {
+  background-color: #1e1e1e; /* slightly lighter dark */
+  border: 1px solid #2e7d32; /* green accent border */
+  border-radius: 12px;
+  padding: 2rem;
+  width: 60%;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4); /* green shadow */
+}
+
+/* Headings */
+.page h1,
+.page h2 {
+  color: #2e7d32; /* green accent */
+  margin-bottom: 1rem;
+}
+
+/* Inputs */
+.page input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #2e7d32;
+  border-radius: 8px;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.page input::placeholder {
+  color: #a5d6a7; /* lighter green placeholder */
+}
+
+/* Buttons */
+.page button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2e7d32; /* green accent */
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.page button:hover {
+  background-color: #1b5e20; /* darker green on hover */
+}
+
+/* Links */
+.page a {
+  color: #a5d6a7;
+  text-decoration: none;
+}
+
+.page a:hover {
+  text-decoration: underline;
+}
+
+/* Small text / hints */
+.page small {
+  color: #a5d6a7;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff7070;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #427b00;
+}
+
+/* Horizontal Button Group (To display buttons side-by-side) */
+.horizontal-button-group {
+  display: flex; /* Use flexbox to align children (buttons) horizontally */
+  gap: 1rem; /* Add consistent space between the buttons */
+  margin-top: 1rem; /* Add some space above the button group */
+  width: 100%; /* Ensure the group container takes full width */
+}
+
+/* Override the default .page button width to allow buttons to share space */
+.horizontal-button-group button {
+  width: auto; /* Buttons will take only the necessary width for content */
+  flex-grow: 1; /* Allows buttons to equally share the available horizontal space */
+  /* Remove top/bottom margin if buttons are already spaced by the group's gap */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Custom class applied to the <v-img> component */
+.image-with-highlight {
+  /* Transition is essential for a smooth visual effect */
+  transition: filter 0.3s ease-in-out;
+  /* Initial state: No visible highlight (or a very subtle one if desired) */
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+/* State when the user hovers the mouse over the image */
+.image-with-highlight:hover {
+  /* Apply the light green glow/highlight effect */
+  filter: drop-shadow(0 0 5px #a5d6a7) /* Smaller glow */
+    drop-shadow(0 0 10px rgba(165, 214, 167, 0.4)); /* Larger, softer glow */
+}
+
+/* Navigation Bar Container */
+.navbar {
+  display: flex; /* Aligns buttons horizontally */
+  justify-content: space-between;
+  align-items: center; /* Vertically centers content */
+  width: 100%;
+  padding: 1rem 2rem; /* Vertical and horizontal padding */
+  background-color: #1e1e1e; /* Dark background, slightly lighter than the page */
+  border-bottom: 1px solid #2e7d32; /* Green accent border at the bottom */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Style for the buttons within the navigation bar */
+.navbar button {
+  width: auto;
+  margin-right: 1rem; /* Space between buttons */
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid #e0e0e0; /* Light border initially */
+  color: #e0e0e0;
+  font-weight: normal;
+  border-radius: 8px; /* Optional: make buttons rounded */
+  transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover and Active State */
+.navbar button:hover {
+  background-color: #2e7d32; /* Green background */
+  color: #fff;
+  border-color: #a5d6a7; /* Light green border on hover */
+  box-shadow:
+    0 0 10px #a5d6a7,
+    0 0 20px #a5d6a7; /* Glow effect */
+}
+
+/* Optional: Focus state for keyboard navigation */
+.navbar button:focus {
+  outline: none;
+  border-color: #a5d6a7;
+  box-shadow:
+    0 0 10px #a5d6a7,
+    0 0 20px #a5d6a7;
+}
+
+.left-alignment {
+  justify-content: left;
+}
+
+.right-alignment {
+  justify-content: right;
+}
+
+.v-data-table td.text-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.v-sheet--offset {
+  top: -24px;
+  position: relative;
+}
+
+.chat-page {
+  display: flex;
+  justify-content: center;
+}
+.chat-container {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 72px);
+  border: 1px solid #2e7d32;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #121212;
+}
+.chat-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #2e7d32;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.status {
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.status.online {
+  background: #121212;
+  color: #2e7d32;
+}
+.status.connecting {
+  background: #121212;
+  color: #a36b00;
+}
+.status.offline {
+  background: #121212;
+  color: #9b1c1c;
+}
+.messages {
+  padding: 12px;
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #121212;
+}
+.message {
+  max-width: 76%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #121212;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02) inset;
+}
+.message.me {
+  margin-left: auto;
+  background: #2e7d32;
+}
+.message.pending {
+  opacity: 0.7;
+  filter: blur(0px);
+}
+.meta {
+  font-size: 0.75rem;
+  color: #fff;
+  display: flex;
+  gap: 8px;
+}
+.author {
+  font-weight: 600;
+}
+.body {
+  margin-top: 4px;
+}
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #2e7d32;
+}
+.composer input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  color: #fff;
+}
+.composer button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2e7d32; /* green accent */
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.composer button:disabled {
+  opacity: 0.7;
+}
+
+.composer input::placeholder {
+  color: #fff; /* change to any color you want */
+  opacity: 0.7; /* optional: ensures full opacity */
+}

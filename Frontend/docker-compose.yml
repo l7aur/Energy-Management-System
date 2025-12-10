@@ -1,0 +1,17 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: vue-frontend:latest
+    ports:
+      - '8080:80'
+    restart: 
+      unless-stopped
+    networks:
+      - frontend-network
+
+networks:
+  frontend-network:
+    name: frontend-network
+    driver: bridge

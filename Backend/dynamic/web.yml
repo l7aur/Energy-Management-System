@@ -1,0 +1,13 @@
+http:
+  routers:
+    frontend-router:
+      rule: "Host(`localhost`)"
+      entryPoints:
+        - web
+      service: frontend-service
+
+  services:
+    frontend-service:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:8080"

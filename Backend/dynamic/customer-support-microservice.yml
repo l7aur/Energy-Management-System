@@ -1,0 +1,33 @@
+http:
+  routers:
+    customer-support-microservice-secure:
+      rule: "Host(`localhost`) && PathPrefix(`/customersupport/secure`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-customer-support-prefix
+        - cors-middleware
+        - my-jwt-middleware
+      service: customer-support-microservice
+
+    customer-support-microservice-public:
+      rule: "Host(`localhost`) && PathPrefix(`/customersupport/public`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-customer-support-prefix
+        - cors-middleware
+      service: customer-support-microservice
+
+  middlewares:
+    strip-customer-support-prefix:
+      stripPrefix:
+        prefixes:
+          - "/customersupport/public"
+          - "/customersupport/secure"
+
+  services:
+    customer-support-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://customer-support-microservice:7777"

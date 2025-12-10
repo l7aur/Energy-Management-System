@@ -1,0 +1,33 @@
+http:
+  routers:
+    device-microservice-secure:
+      rule: "Host(`localhost`) && PathPrefix(`/device/secure`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-device-prefix
+        - cors-middleware
+        - my-jwt-middleware
+      service: device-microservice
+
+    device-microservice-public:
+      rule: "Host(`localhost`) && PathPrefix(`/device/public`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-device-prefix
+        - cors-middleware
+      service: device-microservice
+
+  middlewares:
+    strip-device-prefix:
+      stripPrefix:
+        prefixes:
+          - "/device/public"
+          - "/device/secure"
+
+  services:
+    device-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://device-microservice:7777"

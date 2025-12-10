@@ -1,0 +1,34 @@
+http:
+  routers:
+    notification-microservice-secure:
+      rule: "Host(`localhost`) && PathPrefix(`/notification/secure`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-notification-prefix
+        - cors-middleware
+        - my-jwt-middleware
+      service: notification-microservice
+
+    notification-microservice-public:
+      rule: "Host(`localhost`) && PathPrefix(`/notification/public`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-notification-prefix
+        - cors-middleware
+      service: notification-microservice
+
+  middlewares:
+    strip-notification-prefix:
+      stripPrefix:
+        prefixes:
+          - "/notification/public"
+          - "/notification/secure"
+
+  services:
+    notification-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://notification-microservice:7777"
+        passHostHeader: true

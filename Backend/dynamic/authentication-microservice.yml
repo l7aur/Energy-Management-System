@@ -1,0 +1,22 @@
+http:
+  routers:
+    authentication-microservice:
+      rule: "Host(`localhost`) && PathPrefix(`/auth`)"
+      entryPoints:
+        - web
+      middlewares:
+        - strip-auth-prefix
+        - cors-middleware
+      service: authentication-microservice
+
+  middlewares:
+    strip-auth-prefix:
+      stripPrefix:
+        prefixes:
+          - "/auth"
+
+  services:
+    authentication-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://authentication-microservice:7777"

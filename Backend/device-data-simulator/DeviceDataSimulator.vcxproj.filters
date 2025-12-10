@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Devices">
+      <UniqueIdentifier>{dbae0ae9-7ac9-4ba7-8dc0-b3fcc4991659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Devices">
+      <UniqueIdentifier>{5c26c1df-fda9-40f6-ba3c-312017f0e5e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{8a6d85b8-1611-47e2-94e6-ea9e17071843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{d99ad559-c479-4cce-a145-3d5c02ecca24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MQ Publisher">
+      <UniqueIdentifier>{bb98882a-8807-4083-be9d-3b959a1ef94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MQ Publisher">
+      <UniqueIdentifier>{6bfe17c0-0700-4364-b288-e5ba0f511d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Devices\Products">
+      <UniqueIdentifier>{24f8ea25-e71c-411c-b097-880706d46c0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Devices\Products">
+      <UniqueIdentifier>{947f45ef-dc18-43df-ad1d-3227d7081c0a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CommandLineParser.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ExitManager.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceFactory.cpp">
+      <Filter>Source Files\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="MessagePublisher.cpp">
+      <Filter>Source Files\MQ Publisher</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceDataSimulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceType.cpp">
+      <Filter>Source Files\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="CoffeeMachine.cpp">
+      <Filter>Source Files\Devices\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="Laptop.cpp">
+      <Filter>Source Files\Devices\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="Fridge.cpp">
+      <Filter>Source Files\Devices\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="PC.cpp">
+      <Filter>Source Files\Devices\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="TV.cpp">
+      <Filter>Source Files\Devices\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="MyConnectionHandler.cpp">
+      <Filter>Source Files\MQ Publisher</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommandLineParser.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ExitManager.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="IDevice.hpp">
+      <Filter>Header Files\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceFactory.hpp">
+      <Filter>Header Files\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.hpp">
+      <Filter>Header Files\MQ Publisher</Filter>
+    </ClInclude>
+    <ClInclude Include="MessagePublisher.hpp">
+      <Filter>Header Files\MQ Publisher</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceType.hpp">
+      <Filter>Header Files\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="CoffeeMachine.hpp">
+      <Filter>Header Files\Devices\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="Laptop.hpp">
+      <Filter>Header Files\Devices\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="PC.hpp">
+      <Filter>Header Files\Devices\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="TV.hpp">
+      <Filter>Header Files\Devices\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="Fridge.hpp">
+      <Filter>Header Files\Devices\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="MyConnectionHandler.hpp">
+      <Filter>Header Files\MQ Publisher</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
