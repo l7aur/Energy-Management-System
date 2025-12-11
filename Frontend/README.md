@@ -62,3 +62,20 @@ The `docker-compose.yml` file is provided in the repository.
 ```bash
 docker-compose up --build
 ```
+## Screenshots
+
+![Landing Page View](README/image.png)
+
+![Login Page View](README/image-1.png)
+
+![Home Screen View (logged username is "admin")](README/image-2.png)
+
+![Admin Dashboard View - User Management Page](README/image-3.png)
+
+![Admin Dashboard View - Device Management Page](README/image-4.png)
+
+![Group Chat View - left: admin view, right: client view, Customer Support is provided automatically by forwarding messages to Google's Gemini](README/image-5.png)
+
+![Admin Dashboard - Notification in the top of the page beacuse the coffee machine exceeded the maximum consumption value](README/image-6.png)
+
+![Plot of the consumption values for the coffee machine on 5th of december 2025, data has been generated using the device-data-simulator in ./Backend](README/image-7.png)
